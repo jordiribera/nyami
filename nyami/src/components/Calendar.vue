@@ -1,23 +1,17 @@
 <template>
     <div class="container">
-        <button class="btn btn-inverse m-2" @click="events.push({
-            start: '2022-1-31',
-            end: '2022-1-31',
-            title: 'Minjar!',
-            class: 'dinar'
-        })">Afegir recepta</button>
-        <button class="btn btn-inverse m-2" @click="events.pop()">Borrar la última recepta</button>
-        <vue-cal 
-            class="vuecal--green-theme" 
+      <vue-cal 
+            
             :time="false"  
             style="height: 500px"
             :disable-views="['years', 'year', 'week']"
             today-button
             :events="events"
             locale="ca"
-            active-view="day"
-            
-            :onEventClick="addRecipe"
+            active-view="month"
+            events-on-month-view="short"
+            @cell-dblclick="addRecipe"
+            :onEventClick="viewRecipe"
         />
         
         
@@ -29,47 +23,26 @@
 import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
 import 'vue-cal/dist/i18n/ca.js'
+import { getAllEvents } from "@/db";
 
 
 export default {
   components: { VueCal },
-  data: () => ({
-    events: [
-    {
-      start: '2022-1-31',
-      end: '2022-1-31',
-      title: 'Llet amb cereals',      
-      class: 'esmorzar'
-    },
-    {
-      start: '2022-2-1',
-      end: '2022-2-1',
-      title: 'Formatge, amb raïm i nous',      
-      class: 'esmorzar'
-    },
-    {
-      start: '2022-2-1',
-      end: '2022-2-1',
-      title: 'Cuscus de vegetals',      
-      class: 'dinar'
-    },
-    {
-      start: '2022-2-1',
-      end: '2022-2-1',
-      title: 'Entrepà de pernil dolç i formatge',      
-      class: 'berenar'
-    },
-    {
-      start: '2022-2-1',
-      end: '2022-2-1',
-      title: 'Crema de pèsols',      
-      class: 'sopar'
-    }
-  ]
-  }),
+  data() {
+    return {      
+      events: []      
+    };
+  },
+  async mounted(){
+    this.events=await getAllEvents();
+  },
   methods:{
-      addRecipe(){
-          this.$router.push("/recipes");
+      //ha de passar el títol de la recepta com a paràmetre
+      viewRecipe(event){          
+          this.$router.push("/actualRecipe/"+event.title);
+      },
+      addRecipe(event){        
+        this.$router.push("/recipes/"+event.format());        
       }
   }
 }
@@ -77,8 +50,12 @@ export default {
 
 <style lang="scss">
 
-.vuecal__event.esmorzar {background-color: rgba(253, 156, 66, 0.9);border: 1px solid rgb(233, 136, 46);color: #fff;}
-.vuecal__event.dinar {background-color: rgba(255, 102, 102, 0.9);border: 1px solid rgb(235, 82, 82);color: #fff;}
-.vuecal__event.berenar {background-color: rgba(173, 185, 23, 0.9);border: 1px solid rgb(153, 165, 3);color: #fff;}
-.vuecal__event.sopar {background-color: rgba(184, 28, 131, 0.9);border: 1px solid rgb(164, 8, 111);color: #fff;}
+.vuecal__event.esmorzar {background-color: $secundary;border: 1px solid rgb(184, 215, 189);color: #fff;}
+.vuecal__event.dinar {background-color: $tertiary;border: 1px solid rgb(138, 194, 148);color: #fff;}
+.vuecal__event.berenar {background-color: $quaternary;border: 1px solid rgb(49, 137, 64);color: #fff;}
+.vuecal__event.sopar {background-color: $quinary;border: 1px solid rgb(16, 106, 32);color: #fff;}
+
+.vuecal__menu, .vuecal__cell-events-count {background-color: $primary }
+.vuecal__title-bar {background-color: $secundary;}
+.vuecal__cell--selected:before {border-color: $primary;}
 </style>

@@ -19,7 +19,8 @@
         <button @click="toggleIngredientsView" class="btn btn-inverse">Ingredients <span v-if="!ingredientsView">+</span><span v-else>-</span></button>
         <a :href="recipeCard.recipeLink">
           <button class="btn btn-inverse">Link</button>
-        </a>                  
+        </a>
+        <button v-if="recipeDate!=null" @click="addToCalendar" class="btn btn-light">Afegir</button>                  
       </div>
       <div v-if="ingredientsView" class="mt-4 mb-2">
         <ul>
@@ -34,6 +35,8 @@
 </template>
 
 <script>
+import { addEvent } from "@/db";
+
 export default {
   name: "RecipeCard",
   data() {
@@ -43,6 +46,8 @@ export default {
   },
   props: {
     recipeCard: Object,
+    recipeDate: String,
+    meal: String
   },
   mounted() {
   },
@@ -54,6 +59,21 @@ export default {
     toggleIngredientsView() {
       this.ingredientsView = !this.ingredientsView;
     },
+    async addToCalendar(){
+      if(this.meal==""){
+        alert("Has de decidir per quin àpat serà la recepta");
+      }else{
+        var newEvent={
+          title: this.recipeCard.name,
+          start: this.recipeDate,
+          end: this.recipeDate,
+          class: this.meal
+        };
+        await addEvent(newEvent);
+        this.$router.push("/");
+      }
+      
+    }
   },
 };
 </script>

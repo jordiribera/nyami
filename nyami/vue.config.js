@@ -1,7 +1,7 @@
 module.exports = {
   pwa: {
-    name: 'vue-petinder',
-    themeColor: '#7DE88C',
+    name: 'nyami',
+    themeColor: '#70BC7D',
     msTileColor: '#000000',
     appleMobileWebAppCapable: 'no',
     appleMobileWebAppStatusBarStyle: 'default',

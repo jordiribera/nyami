@@ -3,14 +3,14 @@ import "@/firebase";
 import { getFirestore } from "firebase/firestore";
 
 import {
-  collection,
-  doc,
-  addDoc,
-  setDoc,
-  getDocs,
-  getDoc,
+  collection,  
+  addDoc,  
+  getDocs,  
   query,
   where,
+  /* doc,
+  setDoc,
+  getDoc, */
 } from "firebase/firestore";
 
 export default db;
@@ -19,7 +19,8 @@ const db = getFirestore();
 
 const ingredientsCollection = collection(db, "ingredients");
 const recipesCollection = collection(db, "recipes");
-const petCollection = collection(db, "pets");
+const eventsCollection = collection(db, "calendar");
+
 
 //recull tots els ingredients de la base de dades i els retorna com a array
 export async function getAllIngredients() {
@@ -41,6 +42,29 @@ export async function getAllRecipes() {
   return recipes;
 }
 
+//recull totes les receptes de la base de dades i les retorna com a array
+export async function getAllEvents() {
+  const events = [];
+  const querySnapshot = await getDocs(eventsCollection);
+  querySnapshot.forEach((doc) => {
+    events.push(doc.data());
+  });
+  return events;
+}
+
+//retorna la recepta amb el nom passat com a paràmetre
+
+export async function getRecipe(name) {
+  const recipes = [];
+  const q = query(collection(db, "recipes"), where("name", "==", name));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    recipes.push(doc.data());
+  });
+
+  return recipes;
+}
+
 //afegeix un nou ingredient a la base de dades
 export async function addIngredient(ingredient) {
   await addDoc(ingredientsCollection, ingredient);  
@@ -51,49 +75,13 @@ export async function addRecipe(recipe) {
   await addDoc(recipesCollection, recipe);  
 }
 
-//rep l'objecte pet i afegeix la nova mascota a la base de dades
-export async function addPet(pet) {
-  const ref = doc(petCollection);
-  pet.id = ref.id;
-  await setDoc(ref, pet);
-  console.log("Document written with ID: ", pet.id);
+//afegeix una nova entrada al calendari de la base de dades
+export async function addEvent(event) {
+  await addDoc(eventsCollection, event);  
 }
 
-//recull totes les mascotes de la base de dades i les retorna com a array
-export async function getAllPets() {
-  const pets = [];
-  const querySnapshot = await getDocs(petCollection);
-  querySnapshot.forEach((doc) => {
-    pets.push(doc.data());
-  });
-  return pets;
-}
 
-//retorna la mascota amb l'ID passat com a paràmetre
-export async function getPet(petId) {
-  const docRef = doc(db, "pets", petId);
-  const docSnap = await getDoc(docRef);
-
-  if (docSnap.exists()) {    
-    return docSnap.data();
-  } else {
-    // doc.data() will be undefined in this case
-    console.log("No existeix");
-  }
-}
-
-//retorna un array amb les mascotes amb el nom igual al passat com a paràmetre
-export async function search(name) {
-  const pets = [];
-  const q = query(collection(db, "pets"), where("name", "==", name));
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    pets.push(doc.data());
-  });
-
-  return pets;
-}
-
+/* 
 //retorna un array amb les mascotes que tinguin les característiques passades com a paràmetre
 export async function advancedSearch(species, sex, size) {
   const pets = [];
@@ -120,3 +108,4 @@ export async function advancedSearch(species, sex, size) {
 
   return pets;
 }
+ */
