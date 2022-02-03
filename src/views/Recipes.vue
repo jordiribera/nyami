@@ -22,8 +22,10 @@
               <input v-model="meal" type="radio" value="sopar" class="form-check-input" required/>
               Sopar
             </p>
-          </div>
+          </div>          
           <input class="form-control" type="text" v-model="searchValue" placeholder="Recepta" id="search-input"/>
+          <p>Si no trobes la recepta que busques també la pots crear</p>
+          <router-link to="/newRecipe"><button class="btn btn-inverse">Som-hi</button></router-link>
           <div class="row mt-3">
             <div
               class="col-sm-6 col-md-4"

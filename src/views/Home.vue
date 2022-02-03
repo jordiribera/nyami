@@ -5,8 +5,9 @@
         <img class="img_home" src="../assets/home_img_2.jpg" alt="">        
       </section>          
     </main>
+    <Calendar ></Calendar>
   </div>
-  <Calendar ></Calendar>
+  
 </template>
 
 <script>
