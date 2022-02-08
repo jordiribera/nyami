@@ -1,4 +1,4 @@
-# vue-petinder
+# nyami
 
 ## Project setup
 ```

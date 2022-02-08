@@ -1,11 +1,17 @@
 <template>
-  <div class="app-container">
-    <main class="page-home">
+  <div class="app-container ">
+    <main v-if="!isLoggedIn" class="page-home">
       <section class="block-featured">
         <img class="img_home" src="../assets/home_img_2.jpg" alt="">        
       </section>          
     </main>
-    <Calendar ></Calendar>
+    <div v-if="isLoggedIn">
+      <Calendar class="calendar" ></Calendar>
+      <router-link to="/shoppingList" class="d-flex justify-content-center mt-4">
+        <button class="btn btn-inverse">Llista de la compra</button>
+      </router-link>
+    </div>
+    
   </div>
   
 </template>
@@ -13,16 +19,39 @@
 <script>
 
 import Calendar from "@/components/Calendar.vue";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default {
   name: "Home",
   data() {
     return {
-      
+      isLoggedIn:false
     };
   },
   components: {
     Calendar    
+  },
+
+  created() {
+    //Comprova si algun usuari ha iniciat la sessió
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.isLoggedIn = true;
+        this.currentUser = user.email;
+        console.log(this.currentUser);
+        //treu el comportament onscroll quan es demunta la pàgina
+        window.onscroll = function () {      
+        };
+        //posa la classe sticky quan es demunta la pàgina
+        var header = document.getElementById("header");
+        header.classList.add("sticky");        
+      } else {
+        this.isLoggedIn = false;
+        this.currentUser = "";
+        
+      }      
+    });
   },
   unmounted() {
     //treu el comportament onscroll quan es demunta la pàgina
@@ -35,23 +64,26 @@ export default {
 
   async mounted() {
     
-    // SCROLL
-    // cuando el usuario hace scroll se ejecuta la función stickyfy
-    window.onscroll = function () {
-      stickyfy();
-    };
+      // SCROLL
+      // cuando el usuario hace scroll se ejecuta la función stickyfy
+      window.onscroll = function () {
+        stickyfy();
+      };
 
-    var header = document.getElementById("header");
-    header.classList.remove("sticky");
+      var header = document.getElementById("header");
+      header.classList.remove("sticky");
 
-    // Se añade la clase "sticky" al header cuando se llega a la posición de scroll definida y se quita cuando no se cumple la condición
-    function stickyfy() {
-      if (window.pageYOffset > 1) {
-        header.classList.add("sticky");
-      } else {
-        header.classList.remove("sticky");
+      // Se añade la clase "sticky" al header cuando se llega a la posición de scroll definida y se quita cuando no se cumple la condición
+      function stickyfy() {
+        if (window.pageYOffset > 1) {
+          header.classList.add("sticky");
+        } else {
+          header.classList.remove("sticky");
+        }
       }
-    }
+    
+    
+    
   },
 };
 </script>
@@ -59,6 +91,9 @@ export default {
 <!-- Añadimos "scoped" para limitar el CSS a este componente -->
 <style scoped lang="scss">
 // Estils
+.calendar{
+  margin-top: 70px;
+}
 
 .img_home{
   max-height: 650px;  

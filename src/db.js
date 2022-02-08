@@ -62,8 +62,9 @@ export async function getRecipe(name) {
     recipes.push(doc.data());
   });
 
-  return recipes;
+  return recipes[0];
 }
+
 
 //afegeix un nou ingredient a la base de dades
 export async function addIngredient(ingredient) {

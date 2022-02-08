@@ -79,6 +79,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 p{
   font-size: 14px;
 }

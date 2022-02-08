@@ -82,11 +82,11 @@ export default {
       if (user) {
         this.isLoggedIn = true;
         this.currentUser = user.email;
-        console.log(this.currentUser);
+        console.log(this.currentUser);        
       } else {
         this.isLoggedIn = false;
         this.currentUser = "";
-      }
+      }      
     });
   },
 

@@ -7,6 +7,7 @@ import Ingredients from "@/views/Ingredients.vue";
 import Recipes from "@/views/Recipes.vue";
 import NewRecipe from "@/views/NewRecipe.vue";
 import ActualRecipe from "@/views/ActualRecipe.vue";
+import ShoppingList from "@/views/ShoppingList.vue";
 
 const routes = [
   { path: "/", component: Home },  
@@ -19,6 +20,7 @@ const routes = [
   { path: "/recipes/:date", component: Recipes },
   { path: "/actualRecipe", component: ActualRecipe },
   { path: "/actualRecipe/:name", component: ActualRecipe },
+  { path: "/shoppingList", component: ShoppingList },
 ];
 
 const router = createRouter({
