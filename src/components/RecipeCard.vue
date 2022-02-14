@@ -2,8 +2,11 @@
   <article class="card d-flex flex-column justify-content-between">
     <div>
       <div class="card-header">
+        <router-link to="/">
+          <button v-if="recipeDate==null"  type="button" class="close-card btn-close" aria-label="Close"></button>
+        </router-link>        
         <img
-          class="card-img-top"
+          class="img-fluid"
           v-bind:src="recipeCard.image_url"
           :alt="recipeCard.name"
         />
@@ -79,6 +82,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.close-card{
+  z-index: 10;
+  position:absolute;
+  top:15px;
+  right:15px;
+}
 
 p{
   font-size: 14px;
@@ -100,35 +109,17 @@ p{
 
   .card-header {
     padding: 0 0 0 0;
-    //height: 200px;
+    
     display: flex;
-    //align-items: flex-end;
+    
     justify-content: center;
     overflow: hidden;
   }
 
-  .card-body {
-    padding: 5px 10px;
-    display: flex;
-    align-items: center;
-    //justify-content: space-between;
-  }
+ 
 
-  .card-img-top {
-    max-height: 100%;
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    margin-bottom: -1px;
-  }
-
-  .card-icons {
-    display: flex;
-    align-items: center;
-    li {
-      margin-left: 7px;
-    }
-  }
+  
+  
 
   &:hover {
     cursor: pointer;

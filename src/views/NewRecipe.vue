@@ -49,7 +49,24 @@
             />
         </div>
         <div class="form-group">
-            <label class="form-label" for="recipe.thermomix">És una recepta de Thermomix <span>*</span></label>
+            <label class="form-label" for="image_url">O enganxa la Url d'una imatge</label>
+            <input
+              v-model="recipe.image_url"
+              placeholder="Url de la imatge"
+              type="text"
+              id="image_url"
+              class="form-control"              
+            />
+            <img
+                class="mt-3"
+                v-if="recipe.image_url != ''"
+                :src="recipe.image_url"
+                alt=""
+                height="200"
+            />
+          </div>
+        <div class="form-group">
+            <label class="form-label" for="recipe.thermomix">És una recepta de Thermomix? <span>*</span></label>
             <div class="d-flex justify-content-center gap-2">
                 <p>
                     <input
@@ -226,11 +243,11 @@ export default {
         async createRecipe(){
             if (this.myFile != null) {
                 this.recipe.image_url = await this.uploadFile();
-            } else {
+            } /* else {
                 this.recipe.image_url ="";
-            }
+            } */
             await addRecipe(this.recipe);
-            this.$router.push("/recipes");
+            this.$router.push("/");
         },
 
         //afegeix un ingredient a l'array d'ingredients

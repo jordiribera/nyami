@@ -5,7 +5,7 @@
         <div class="container">
           <h1 class="main-title">FA BONA PINTA</h1>          
           <div class="row mt-3 d-flex justify-content-center">
-            <div class="col-sm-6 col-md-4 ">
+            <div class="col-sm-6 col-md-4 ">              
               <RecipeCard v-bind:recipeCard="recipe"></RecipeCard>
             </div>
           </div>

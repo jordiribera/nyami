@@ -1,15 +1,13 @@
 <template>
-  <div class="app-container ">
+  <div class="container ">
     <main v-if="!isLoggedIn" class="page-home">
       <section class="block-featured">
         <img class="img_home" src="../assets/home_img_2.jpg" alt="">        
       </section>          
     </main>
-    <div v-if="isLoggedIn">
-      <Calendar class="calendar" ></Calendar>
-      <router-link to="/shoppingList" class="d-flex justify-content-center mt-4">
-        <button class="btn btn-inverse">Llista de la compra</button>
-      </router-link>
+    <div class="calendar" v-if="isLoggedIn">     
+      
+      <Calendar></Calendar>      
     </div>
     
   </div>

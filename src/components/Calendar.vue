@@ -1,14 +1,26 @@
 <template>
-    <div class="container">
+    <div class="container">  
+      <div  class="d-flex justify-content-center fixed-bottom">
+        <button @click="activeView = 'day'" class="btn btn-inverse"><img src="../assets/icons/icon_day.svg" height ="50" width="50" /></button>
+        <button @click="activeView = 'month'" class="btn btn-inverse"><img src="../assets/icons/icon_month.svg" height ="50" width="50" /></button>
+        
+          <router-link to="/shoppingList">
+            <button class="btn btn-inverse">
+              <img src="../assets/icons/icon_shopping.svg" height ="50" width="50" />
+            </button>
+          </router-link>
+                
+      </div>    
       <vue-cal 
             
             :time="false"  
             style="height: 500px"
             :disable-views="['years', 'year', 'week']"
+            hide-view-selector
             today-button
             :events="events"
             locale="ca"
-            active-view="month"
+            :active-view="activeView"
             events-on-month-view="short"
             @cell-dblclick="addRecipe"
             :onEventClick="viewRecipe"
@@ -16,6 +28,7 @@
         
         
     </div>
+    
     
     
 </template>
@@ -30,7 +43,8 @@ export default {
   components: { VueCal },
   data() {
     return {      
-      events: []      
+      events: [],
+      activeView:"month"      
     };
   },
   async mounted(){
@@ -50,12 +64,17 @@ export default {
 
 <style lang="scss">
 
-.vuecal__event.esmorzar {background-color: $secundary;border: 1px solid rgb(184, 215, 189);color: #fff;}
-.vuecal__event.dinar {background-color: $tertiary;border: 1px solid rgb(138, 194, 148);color: #fff;}
-.vuecal__event.berenar {background-color: $quaternary;border: 1px solid rgb(49, 137, 64);color: #fff;}
-.vuecal__event.sopar {background-color: $quinary;border: 1px solid rgb(16, 106, 32);color: #fff;}
+
+.vuecal__event.esmorzar {background-color: $tertiary;color: #fff;}
+.vuecal__event.dinar {background-color: $quaternary;color: #fff;}
+.vuecal__event.berenar {background-color: $quinary;color: #fff;}
+.vuecal__event.sopar {background-color: $senary;color: #fff;} 
 
 .vuecal__menu, .vuecal__cell-events-count {background-color: $primary }
 .vuecal__title-bar {background-color: $secundary;}
 .vuecal__cell--selected:before {border-color: $primary;}
+
+.vuecal__event{
+  font-size: 13px;
+}
 </style>

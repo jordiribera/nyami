@@ -63,10 +63,7 @@ export default {
 
 <style lang="scss">
 
-.vuecal__event.esmorzar {background-color: $secundary;border: 1px solid rgb(184, 215, 189);color: #fff;}
-.vuecal__event.dinar {background-color: $tertiary;border: 1px solid rgb(138, 194, 148);color: #fff;}
-.vuecal__event.berenar {background-color: $quaternary;border: 1px solid rgb(49, 137, 64);color: #fff;}
-.vuecal__event.sopar {background-color: $quinary;border: 1px solid rgb(16, 106, 32);color: #fff;}
+
 
 .vuecal__menu, .vuecal__cell-events-count {background-color: $primary }
 .vuecal__title-bar {background-color: $secundary;}

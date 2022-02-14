@@ -20,6 +20,7 @@ const db = getFirestore();
 const ingredientsCollection = collection(db, "ingredients");
 const recipesCollection = collection(db, "recipes");
 const eventsCollection = collection(db, "calendar");
+const shopsCollection = collection(db, "shops");
 
 
 //recull tots els ingredients de la base de dades i els retorna com a array
@@ -42,7 +43,7 @@ export async function getAllRecipes() {
   return recipes;
 }
 
-//recull totes les receptes de la base de dades i les retorna com a array
+//recull tots els events del calendari de la base de dades i les retorna com a array
 export async function getAllEvents() {
   const events = [];
   const querySnapshot = await getDocs(eventsCollection);
@@ -50,6 +51,16 @@ export async function getAllEvents() {
     events.push(doc.data());
   });
   return events;
+}
+
+//recull totes les botigues de la base de dades i les retorna com a array
+export async function getAllShops() {
+  const shops = [];
+  const querySnapshot = await getDocs(shopsCollection);
+  querySnapshot.forEach((doc) => {
+    shops.push(doc.data());
+  });
+  return shops;
 }
 
 //retorna la recepta amb el nom passat com a paràmetre
@@ -63,6 +74,19 @@ export async function getRecipe(name) {
   });
 
   return recipes[0];
+}
+
+//retorna la recepta amb el nom passat com a paràmetre
+
+export async function getIngredient(name) {
+  const ingredients = [];
+  const q = query(collection(db, "ingredients"), where("name", "==", name));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    ingredients.push(doc.data());
+  });
+
+  return ingredients[0];
 }
 
 
@@ -79,6 +103,11 @@ export async function addRecipe(recipe) {
 //afegeix una nova entrada al calendari de la base de dades
 export async function addEvent(event) {
   await addDoc(eventsCollection, event);  
+}
+
+//afegeix una nova botiga a la base de dades
+export async function addShop(shop) {
+  await addDoc(shopsCollection, shop);  
 }
 
 

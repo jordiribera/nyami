@@ -3,7 +3,7 @@
     <main class="page-home">      
       <section class="block-list">
         <div class="container">
-          <h1 class="main-title">RECEPTES DISPONIBLES PEL DIA {{recipeDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3-$2-$1')}}</h1>
+          <h1>Receptes disponibles pel dia {{recipeDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3-$2-$1')}}</h1>
           <label class="form-label" for="apat">Primer de tot escull per quin àpat serà la recepta</label>
           <div class="d-flex justify-content-center gap-4">
             <p>
@@ -28,7 +28,7 @@
           <router-link to="/newRecipe"><button class="btn btn-inverse">Som-hi</button></router-link>
           <div class="row mt-3">
             <div
-              class="col-sm-6 col-md-4"
+              class="col-md-6 col-lg-4"
               v-for="recipeCard in filteredRecipes"
               v-bind:key="recipeCard.name"
             >
@@ -74,7 +74,7 @@ export default {
         }
     },
 
-  async mounted() {
+  async created() {
     //crida la funció getAllPets de la base de dades i posa el resultat a l'array pets
     this.recipes = await getAllRecipes();
     this.recipeDate = this.$route.params.date;         

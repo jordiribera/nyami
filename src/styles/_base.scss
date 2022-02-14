@@ -42,24 +42,7 @@ main{
 
 
 
-.main-title, .title{
-    font-weight: 900;
-   
-}
 
-.main-title{
-    font-size: 52px;
-    margin-bottom: 15px;
-
-    span{
-        color: white;
-    }
-
-    @media #{$max-sm} {
-        font-size: 40px;
-        line-height: 1.3em;
-    }
-}
 
 .title{
     font-size: 30px;

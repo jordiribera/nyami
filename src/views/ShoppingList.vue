@@ -1,25 +1,50 @@
 <template>
   <div class="container">
-      <div class="row">
-          <div class="col-md-6 d-flex align-items-center">
-            <div class="text-center">
-              <h1>Llista de la compra</h1>
-              <p>Selecciona els dies que vols que s'afegeixin a la llista de la compra</p>
-            </div>            
-          </div>
-          <div class="col-md-6">
-            <DateRange v-bind:events="events" v-on:selectedDays="putRecipeNames" class="dateRange"></DateRange>
-          </div>
-          <div class="col-md-6 d-flex justify-content-center">
-            <div class="text-center">
-              <ul>
-                <li v-for="ingredient in ingredients" v-bind:key="ingredient">
-                  {{ingredient.name}} {{ingredient.quantity}} {{ingredient.mesure_unit}}
-                </li>
-              </ul>
-            </div>
-          </div>
-      </div>    
+    
+    <div class="row">
+      <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+        <h1>Llista de la compra</h1>
+        <p>Selecciona els dies que vols que s'afegeixin a la llista de la compra</p>
+        <p class="mt-4">També pots afegir les botigues on compraràs els ingredients</p>
+       
+        <div class="d-flex justify-content-center">
+          <form v-on:submit.prevent="addNewShop">
+            <div class="form-group">
+              <!-- <label class="form-label" for="name"></label>  -->                        
+              <input
+                v-model="newShop.name"
+                placeholder="Nom de la botiga"
+                type="text"
+                class="form-control"
+                required
+              />
+            </div>                                                                 
+            <button type="submit" class="mt-2 btn btn-inverse btn-md">Afegir</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6 mt-2">
+        <DateRange v-bind:events="events" v-on:selectedDays="putRecipeNames" ></DateRange>
+      </div>      
+      <div v-if="ingredients.length!=0" class="col-md-12 mt-5">        
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Ingredient</th>
+              <th scope="col">Quantitat</th>
+              <th scope="col">Unitat de mesura</th>              
+              <th scope="col">Botiga</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="ingredient in ingredients" v-bind:key="ingredient">                 
+              <Ingredient :shops="shops" :ingredient="ingredient"></Ingredient>
+            </tr>
+          </tbody>
+        </table>        
+      </div>
+    </div>    
     
   </div>
   
@@ -28,19 +53,28 @@
 <script>
 
 import DateRange from "@/components/DateRange.vue";
+import Ingredient from "@/components/Ingredient.vue";
 import { getAllEvents } from "@/db";
 import { getRecipe } from "@/db"; 
+import { addShop } from "@/db"; 
+import { getAllShops } from "@/db";
  
 export default {
   name: "ShoppingList",
   data() {
     return {      
       events:[],      
-      ingredients:[]       
+      ingredients:[],
+      newShop:{
+        name:""
+      },
+      shops:[]
+      
     };
   },
   components: {
-    DateRange   
+    DateRange,
+    Ingredient   
   },
   methods:{
     async putRecipeNames(selectedDays){  
@@ -67,14 +101,16 @@ export default {
           }                 
       }
       
-      /* for(var n=0;n<this.repeatedIngredients.length-1;n++){
-        for(var o=n+1;o<this.repeatedIngredients.length;o++){
-          if(this.repeatedIngredients[n].name==this.repeatedIngredients[o].name){
-            this.repeatedIngredients[n].quantity+=this.repeatedIngredients[o].quantity;
-            this.repeatedIngredients.splice(o,1); 
+      /* for(var n=0;n<repeatedIngredients.length-1;n++){
+        for(var o=n+1;o<repeatedIngredients.length;o++){
+          if(repeatedIngredients[n].name==repeatedIngredients[o].name){
+            repeatedIngredients[n].quantity+=repeatedIngredients[o].quantity;
+            repeatedIngredients.splice(o,1); 
           }
         }        
-      } */
+      }
+      this.ingredients=repeatedIngredients;
+      */
 
       this.ingredients = repeatedIngredients.reduce((acc, curr) => {
         const exists = acc.find(item => item.name === curr.name);
@@ -95,11 +131,18 @@ export default {
         }
         return 0;
       });     
+    },
+    async addNewShop(){
+      await addShop(this.newShop);
+      this.newShop={};
+      this.newShop.name="";
+      this.shops= await getAllShops();
     }  
   },
  
-  async mounted(){
+  async created(){
     this.events=await getAllEvents();
+    this.shops=await getAllShops(); 
   },
 };
 </script>
