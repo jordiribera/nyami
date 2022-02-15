@@ -26,24 +26,38 @@
       <div class="col-md-6 mt-2">
         <DateRange v-bind:events="events" v-on:selectedDays="putRecipeNames" ></DateRange>
       </div>      
-      <div v-if="ingredients.length!=0" class="col-md-12 mt-5">        
+      <div v-if="ingredients.length!=0" class="col-12 mt-5">        
         <table class="table">
           <thead>
             <tr>
               <th scope="col">Ingredient</th>
               <th scope="col">Quantitat</th>
-              <th scope="col">Unitat de mesura</th>              
+              <th scope="col">Unitat</th>              
               <th scope="col">Botiga</th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="ingredient in ingredients" v-bind:key="ingredient">                 
-              <Ingredient :shops="shops" :ingredient="ingredient"></Ingredient>
+              <Ingredient @removeIngredient="removeIngredient" @updatedIngredient="updateIngredients" :shops="shops" :ingredient="ingredient"></Ingredient>
             </tr>
           </tbody>
         </table>        
       </div>
+      <div v-if="updatedIngredients.length!=0">
+        <ul>
+          <li v-for="shop in shops" v-bind:key="shop">
+            <strong v-if="updatedIngredients.map(item => item.shopToBuy).indexOf(shop.name)!=-1">{{shop.name}}</strong>
+            <ul>
+              <li v-for="item in updatedIngredients" v-bind:key="item">
+                <p v-if="item.shopToBuy==shop.name">
+                  {{item.name}} {{item.quantity}} {{item.mesure_unit}}
+                </p>                 
+              </li>
+            </ul>            
+          </li>
+        </ul>
+      </div> 
     </div>    
     
   </div>
@@ -68,8 +82,8 @@ export default {
       newShop:{
         name:""
       },
-      shops:[]
-      
+      shops:[],
+      updatedIngredients:[]  
     };
   },
   components: {
@@ -77,8 +91,33 @@ export default {
     Ingredient   
   },
   methods:{
+    removeIngredient(ingredient){
+      var isHere=-1;
+        for(var i=0;i<this.updatedIngredients.length;i++){
+          if(this.updatedIngredients[i].name==ingredient.name){
+            isHere=i; 
+          }
+        }
+        this.updatedIngredients.splice(isHere,1);           
+    },
+    updateIngredients(updatedIngredient){
+      console.log(updatedIngredient.name);
+        var isHere=-1;
+        for(var i=0;i<this.updatedIngredients.length;i++){
+          if(this.updatedIngredients[i].name==updatedIngredient.name){
+            isHere=i;                                      
+          } 
+        }        
+        if(isHere==-1){
+          this.updatedIngredients.push(updatedIngredient);
+        }else{
+          console.log(isHere);
+          this.updatedIngredients.splice(isHere,1);
+          this.updatedIngredients.push(updatedIngredient);
+        }                                                                                                 
+    }, 
     async putRecipeNames(selectedDays){  
-      //rep els dies i crea un array de noms de recepta             
+      //rep els dies i crea un array de noms de recepta                  
       var recipeNameList=[];
       for(var j=0;j<this.events.length;j++){      
         for(var i=0;i<selectedDays.length;i++){
@@ -87,13 +126,13 @@ export default {
           }
         }                        
       }      
-      //crea un array de receptes a partir de l'array de noms
+      //crea un array de receptes a partir de l'array de noms      
       var recipesList=[];
       for(var k=0;k<recipeNameList.length;k++){        
         var actualRecipe= await getRecipe(recipeNameList[k]);        
         recipesList.push(actualRecipe); 
       }
-      //crea un array d'ingredients sense distingir si estan repetits      
+      //crea un array d'ingredients sense distingir si estan repetits           
       var repeatedIngredients=[];
       for(var l=0;l<recipesList.length;l++){        
         for(var m=0;m<recipesList[l].ingredients.length;m++){          
@@ -110,8 +149,7 @@ export default {
         }        
       }
       this.ingredients=repeatedIngredients;
-      */
-
+      */     
       this.ingredients = repeatedIngredients.reduce((acc, curr) => {
         const exists = acc.find(item => item.name === curr.name);
         if (exists) {
@@ -130,7 +168,10 @@ export default {
           return -1;
         }
         return 0;
-      });     
+      }); 
+      
+      //posa els ingredients a l'array on es podran modificar i posar on comprar-los
+      /* this.updatedIngredients=this.ingredients;   */
     },
     async addNewShop(){
       await addShop(this.newShop);

@@ -18,10 +18,10 @@
             :disable-views="['years', 'year', 'week']"
             hide-view-selector
             today-button
-            :events="events"
+            :events="events"            
             locale="ca"
             :active-view="activeView"
-            events-on-month-view="short"
+            events-on-month-view="true"
             @cell-dblclick="addRecipe"
             :onEventClick="viewRecipe"
         />
@@ -65,6 +65,7 @@ export default {
 <style lang="scss">
 
 
+.vuecal__cell--today{background-color: $secundary}
 .vuecal__event.esmorzar {background-color: $tertiary;color: #fff;}
 .vuecal__event.dinar {background-color: $quaternary;color: #fff;}
 .vuecal__event.berenar {background-color: $quinary;color: #fff;}

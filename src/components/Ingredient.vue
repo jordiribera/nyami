@@ -11,7 +11,7 @@
     </div> -->
     
         <td v-if="show">{{ingredient.name}} </td>
-        <td v-if="show"><input type="number" :value="quantity" @change="actualizeQuantity()"></td>
+        <td v-if="show"><input type="number" :value="finalIngredient.quantity" @change="actualizeQuantity"></td>
         <td v-if="show">
           <select name="unit_mesure" id="unit_mesure"  v-model="finalIngredient.mesure_unit">
             <option :value="mesure_unit">{{mesure_unit}}</option> 
@@ -24,9 +24,9 @@
           </select>                                 
         </td>
         <td v-if="show">
-          <button class="btn btn-sm btn-inverse" @click="show=false">x</button>
+          <button class="btn btn-sm btn-inverse" @click="removeIngredient">x</button>
         </td>
-        <p>{{finalIngredient.name}} {{finalIngredient.quantity}} {{finalIngredient.mesure_unit}} {{finalIngredient.shopToBuy}}</p>                                       
+        <!-- <p>{{finalIngredient.name}} {{finalIngredient.quantity}} {{finalIngredient.mesure_unit}} {{finalIngredient.shopToBuy}}</p> -->                                        
     
   
 </template>
@@ -38,11 +38,11 @@ export default {
   name: "Ingredient",
   data() {
     return {
-      quantity:0,
+      /* quantity:0, */
       
       mesure_unit:"",
       alternative_mesure:"", 
-      final_mesure_unit:"",   
+       
       show:true,      
       finalIngredient:{
         name:"",
@@ -52,11 +52,21 @@ export default {
       }
     };
   },
+  emits:["updatedIngredient","removeIngredient"],
   props: {
     ingredient: Object,
     shops: Array
     
   },
+  watch:{
+    finalIngredient:{
+      deep:true,
+      handler(newVal){
+        console.log(newVal);
+        this.$emit("updatedIngredient", newVal);
+      }
+    }
+  }, 
   
   async created() {
     var actuaIngredient=await getIngredient(this.ingredient.name);
@@ -65,17 +75,21 @@ export default {
     }else{
         this.alternative_mesure=actuaIngredient.mesure_unit;
     }
-    this.quantity=this.ingredient.quantity;
+    /* this.quantity=this.ingredient.quantity; */
     this.mesure_unit=this.ingredient.mesure_unit;
     this.finalIngredient.mesure_unit=this.mesure_unit;
     this.finalIngredient.name=this.ingredient.name;
+    this.finalIngredient.quantity=this.ingredient.quantity;
     
     
   },
   methods: {
-    actualizeQuantity(){
-      //algo haurem de fer
-      
+    actualizeQuantity(event){      
+      this.finalIngredient.quantity=event.target.value;      
+    },
+    removeIngredient(){
+      this.show=false;
+      this.$emit("removeIngredient",this.ingredient);
     }
     /* add(){
         this.quantity++
@@ -89,6 +103,6 @@ export default {
 
 <style scoped lang="scss">
   input[type="number"] {
-   width:50px;
+   width:60px;
   } 
 </style>
