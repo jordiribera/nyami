@@ -121,16 +121,13 @@
                 <input class="form-control" type="text" v-model="searchValue" placeholder="ingredient" id="search-input"/>          
                 <ul class="mt-3" v-if="searchValue!=''">
                     <li v-for="ingredient in filteredIngredients" v-bind:key="ingredient.name">
-                        {{ingredient.name}}
-                        <select  name="actualIngredient.name" id="actualIngredient.name" v-model="actualIngredient.name">
-                            <option type="text" :value="ingredient.name" selected>{{ingredient.name}}</option>
-                        </select>
+                        {{ingredient.name}}                        
                         <input v-model="actualIngredient.quantity" type="number" class="w-25">
                         <select name="unit_mesure" id="unit_mesure" v-model="actualIngredient.mesure_unit">
                             <option :value="ingredient.mesure_unit">{{ingredient.mesure_unit}}</option>
                             <option :value="ingredient.alternative_mesure">{{ingredient.alternative_mesure}}</option>                        
                         </select>
-                        <button class="btn btn-inverse btn-sm" @click.prevent="addIngredientInArray">+</button>                        
+                        <button class="btn btn-inverse btn-sm" @click.prevent="addIngredientInArray(ingredient.name)">+</button>                        
                     </li>
                 </ul>
                 <ul>
@@ -251,7 +248,8 @@ export default {
         },
 
         //afegeix un ingredient a l'array d'ingredients
-        addIngredientInArray() {        
+        addIngredientInArray(name) {     
+            this.actualIngredient.name=name;   
             this.recipe.ingredients.push(this.actualIngredient);
             this.actualIngredient={};
             this.actualIngredient.name="";

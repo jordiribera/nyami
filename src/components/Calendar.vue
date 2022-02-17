@@ -1,11 +1,11 @@
 <template>
     <div class="container">  
-      <div  class="d-flex justify-content-center fixed-bottom">
-        <button @click="activeView = 'day'" class="btn btn-inverse"><img src="../assets/icons/icon_day.svg" height ="50" width="50" /></button>
-        <button @click="activeView = 'month'" class="btn btn-inverse"><img src="../assets/icons/icon_month.svg" height ="50" width="50" /></button>
+      <div  class="botom-navegation d-flex justify-content-center gap-4 fixed-bottom">
+        <button @click="activeView = 'day'" :class="{active:activeView=='day'}" class="botom-btn"><img src="../assets/icons/icon_day.svg" height ="50" width="50" /></button>
+        <button @click="activeView = 'month'" :class="{active:activeView=='month'}" class="botom-btn"><img src="../assets/icons/icon_month.svg" height ="50" width="50" /></button>
         
           <router-link to="/shoppingList">
-            <button class="btn btn-inverse">
+            <button class="botom-btn">
               <img src="../assets/icons/icon_shopping.svg" height ="50" width="50" />
             </button>
           </router-link>
@@ -47,8 +47,16 @@ export default {
       activeView:"month"      
     };
   },
-  async mounted(){
+  props:{
+    view:String
+  },
+  async created(){
     this.events=await getAllEvents();
+    if(this.view==null){
+      this.activeView="month";
+    }else{
+      this.activeView=this.view;
+    }
   },
   methods:{
       //ha de passar el títol de la recepta com a paràmetre
@@ -63,7 +71,20 @@ export default {
 </script>
 
 <style lang="scss">
-
+.botom-navegation{
+  background-color: $primary;
+  padding-bottom: 5px;
+}
+.botom-btn{
+  background-color: inherit;
+  border:0px;
+  
+}
+.active{
+  border-top: 5px solid white;
+  border-radius: 5px;
+  
+}
 
 .vuecal__cell--today{background-color: $secundary}
 .vuecal__event.esmorzar {background-color: $tertiary;color: #fff;}
@@ -77,5 +98,6 @@ export default {
 
 .vuecal__event{
   font-size: 13px;
+  border-radius: 5px;
 }
 </style>

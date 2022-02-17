@@ -4,7 +4,7 @@
   </div> 
   <div class="container ">    
     <div class="calendar" v-if="isLoggedIn">         
-      <Calendar></Calendar>      
+      <Calendar :view="this.view"></Calendar>      
     </div>   
   </div>
   
@@ -19,15 +19,17 @@ export default {
   name: "Home",
   data() {
     return {
-      isLoggedIn:false
+      isLoggedIn:false,
+      view:""
     };
   },
   components: {
     Calendar    
-  },
+  },  
 
-  created() {
-    //Comprova si algun usuari ha iniciat la sessió
+  created() {    
+    this.view = this.$route.params.view;  
+    //Comprova si algun usuari ha iniciat la sessió    
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {

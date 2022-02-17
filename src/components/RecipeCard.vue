@@ -19,8 +19,8 @@
     
     <div>
       <div class="d-flex justify-content-center gap-2 mt-4 mb-2">
-        <button @click="toggleIngredientsView" class="btn btn-inverse">Ingredients <span v-if="!ingredientsView">+</span><span v-else>-</span></button>
-        <a :href="recipeCard.recipeLink">
+        <button v-if="recipeCard.ingredients!=0" @click="toggleIngredientsView" class="btn btn-inverse">Ingredients <span v-if="!ingredientsView">+</span><span v-else>-</span></button>
+        <a v-if="recipeCard.recipeLink!=''" :href="recipeCard.recipeLink">
           <button class="btn btn-inverse">Link</button>
         </a>
         <button v-if="recipeDate!=null" @click="addToCalendar" class="btn btn-light">Afegir</button>                  

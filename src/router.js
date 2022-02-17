@@ -9,7 +9,9 @@ import ActualRecipe from "@/views/ActualRecipe.vue";
 import ShoppingList from "@/views/ShoppingList.vue";
 
 const routes = [
-  { path: "/", component: Home },  
+  
+  { path: "/", component: Home },
+  { path: "/home/:view", component: Home },   
   { path: "/:notFound(.*)", component: NotFound },
   { path: "/login", name: "login", component: Login },
   { path: "/register", name: "register", component: Register },

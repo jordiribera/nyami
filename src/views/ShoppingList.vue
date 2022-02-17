@@ -1,6 +1,19 @@
 <template>
   <div class="container">
-    
+    <div  class="botom-navegation d-flex justify-content-center gap-4 fixed-bottom">
+      <router-link to="/home/day">
+        <button class="botom-btn"><img src="../assets/icons/icon_day.svg" height ="50" width="50" /></button>
+      </router-link>
+      <router-link to="/home/month">
+        <button class="botom-btn"><img src="../assets/icons/icon_month.svg" height ="50" width="50" /></button>        
+      </router-link>
+      <router-link to="/shoppingList">
+        <button class="botom-btn active">
+          <img src="../assets/icons/icon_shopping.svg" height ="50" width="50" />
+        </button>
+      </router-link>
+                
+    </div>
     <div class="row">
       <div class="col-md-6 text-center d-flex flex-column justify-content-center">
         <h1>Llista de la compra</h1>
@@ -83,13 +96,13 @@ export default {
         name:""
       },
       shops:[],
-      updatedIngredients:[]  
+      updatedIngredients:[],        
     };
   },
   components: {
     DateRange,
     Ingredient   
-  },
+  },  
   methods:{
     removeIngredient(ingredient){
       var isHere=-1;
@@ -190,6 +203,20 @@ export default {
 
 <!-- Añadimos "scoped" para limitar el CSS a este componente -->
 <style scoped lang="scss">
+.botom-navegation{
+  background-color: $primary;
+  padding-bottom: 5px;
+}
+.botom-btn{
+  background-color: inherit;
+  border:0px;
+  
+}
+.active{
+  border-top: 5px solid white;
+  border-radius: 5px;
+  
+}
 // Estils
 .row{
     margin-top: 100px;
